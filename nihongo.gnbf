@@ -1,0 +1,9 @@
+# A probably incorrect grammar for Japanese
+root        ::= jp-char+ ([ \t\n] jp-char+)*
+jp-char     ::= hiragana | katakana |  punctuation | number | alphabet | symbol
+hiragana    ::= [\u3041-\u3094]
+katakana    ::= [\u30a1-\u30fa]
+punctuation ::= [\u3001-\u300f]
+number ::= [0-9]
+alphabet ::= [A-z]
+symbol ::= "=" | "!" | "#" | "'" | "(" | ")" | "~" | "\\" | "{" | "}" |"\u30fc" | "\uff5e" | "?"

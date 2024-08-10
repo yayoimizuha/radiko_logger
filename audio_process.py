@@ -142,3 +142,6 @@ subprocess.run(
 print(
     f"whisper-ctranslate2 --model large-v3 --vad_filter True -f json -o {path_base} {path_base}/for_whisper.wav -p True"
 )
+print(
+    f"python to_hiragana.py {path_base}/for_whisper.json"
+)
