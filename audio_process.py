@@ -16,7 +16,6 @@ path_base = path.join(
     "separated",
     "htdemucs",
     path.basename(PATH).rsplit(sep=".", maxsplit=1)[0],
-    "vocals.wav",
 )
 separated_path = path.join(
     path_base,
@@ -130,6 +129,7 @@ subprocess.run(
         "16000",
         "-ac",
         "1",
+        "-y",
         "-c:a",
         "pcm_s16le",
         path.join(
@@ -139,9 +139,25 @@ subprocess.run(
     ]
 )
 
+subprocess.run(
+    [
+        "ffmpeg",
+        "-i",
+        path.join(
+            path_base,
+            "muted.wav",
+        ),
+        "-n",
+        path.join(
+            path_base,
+            "for_gemini.mp3",
+        ),
+    ]
+)
+
 print(
     f"whisper-ctranslate2 --model large-v3 --vad_filter True -f json -o {path_base} {path_base}/for_whisper.wav -p True"
 )
 print(
-    f"python to_hiragana.py {path_base}/for_whisper.json"
+    f"python gemini_hiraganize.py {path_base}/for_whisper.json"
 )
