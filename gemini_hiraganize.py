@@ -5,7 +5,7 @@ from settings import GEMINI_API_KEY
 from more_itertools import chunked
 from sys import argv
 from json import load
-
+from jaconv import kata2hira
 genai.configure(api_key=GEMINI_API_KEY)
 
 
@@ -62,4 +62,4 @@ with open(path.join(path.dirname(path_json),"hiraganized.txt"),mode="r") as fp:
     text_one_line = fp.read()
 
 with open(path.join(path.dirname(path_json),"hiraganized.txt"),mode="w") as fp:
-    fp.write(text_one_line.replace("\n",""))
+    fp.write(kata2hira(text_one_line.replace("\n","")))
