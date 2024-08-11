@@ -11,6 +11,8 @@ from sys import argv
 
 PATH = argv[1]
 
+cupy.cuda.set_allocator(None)
+
 path_base = path.join(
     getcwd(),
     "separated",
@@ -97,6 +99,7 @@ muted = cupy.asnumpy(vocal_mute_smoothed.reshape((-1, 1)) * cupy.array(base_nump
 # pyplot.plot(muted[:, 1])
 # pyplot.show()
 # exit()
+del vocal_mute_smoothed
 print(muted.dtype)
 print(muted.shape)
 muted_audio = AudioSegment(
@@ -105,6 +108,7 @@ muted_audio = AudioSegment(
     frame_rate=base_sound.frame_rate,
     channels=base_sound.channels,
 )
+
 muted_audio.export(
     path.join(
         getcwd(),
@@ -120,6 +124,7 @@ muted_audio.export(
 subprocess.run(
     [
         "ffmpeg",
+        "-hide_banner",
         "-i",
         path.join(
             path_base,
@@ -142,6 +147,7 @@ subprocess.run(
 subprocess.run(
     [
         "ffmpeg",
+        "-hide_banner",
         "-i",
         path.join(
             path_base,
@@ -158,6 +164,4 @@ subprocess.run(
 print(
     f"whisper-ctranslate2 --model large-v3 --vad_filter True -f json -o {path_base} {path_base}/for_whisper.wav -p True"
 )
-print(
-    f"python gemini_hiraganize.py {path_base}/for_whisper.json"
-)
+print(f"python gemini_hiraganize.py {path_base}/for_whisper.json")
