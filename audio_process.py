@@ -21,11 +21,25 @@ path_base = path.join(
 )
 separated_path = path.join(
     path_base,
-    "vocals.wav",
+    "vocals.mp3",
 )
 
 if not path.exists(separated_path):
-    subprocess.run(["demucs", PATH, "-d", "cuda", "--two-stems", "vocals", "-j", "3"])
+    subprocess.run(
+        [
+            "demucs",
+            PATH,
+            "-d",
+            "cuda",
+            "--two-stems",
+            "vocals",
+            "-j",
+            "3",
+            "--mp3",
+            "--mp3-preset",
+            "4",
+        ]
+    )
 
 vocal = AudioSegment.from_file(separated_path)
 
@@ -115,44 +129,43 @@ muted_audio.export(
         "separated",
         "htdemucs",
         path.basename(PATH).rsplit(sep=".", maxsplit=1)[0],
-        "muted.wav",
+        "muted.mp3",
     ),
-    "wav",
+    "mp3",
 )
 # pyplot.plot(muted[:, 0])
 # pyplot.show()
-subprocess.run(
-    [
-        "ffmpeg",
-        "-hide_banner",
-        "-i",
-        path.join(
-            path_base,
-            "muted.wav",
-        ),
-        "-ar",
-        "16000",
-        "-ac",
-        "1",
-        "-y",
-        "-c:a",
-        "pcm_s16le",
-        path.join(
-            path_base,
-            "for_whisper.wav",
-        ),
-    ]
-)
+# subprocess.run(
+# [
+# "ffmpeg",
+# "-hide_banner",
+# "-i",
+# path.join(
+# path_base,
+# "muted.mp3",
+# ),
+# "-ar",
+# "16000",
+# "-ac",
+# "1",
+# "-y",
+# "-c:a",
+# "pcm_s16le",
+# path.join(
+# path_base,
+# "for_whisper.mp3",
+# ),
+# ]
+# )
 
 subprocess.run(
     [
         "ffmpeg",
         "-hide_banner",
+        "-loglevel",
+        "fatal",
         "-i",
-        path.join(
-            path_base,
-            "muted.wav",
-        ),
+        PATH,
         "-n",
         path.join(
             path_base,
@@ -162,6 +175,6 @@ subprocess.run(
 )
 
 print(
-    f"whisper-ctranslate2 --model large-v3 --vad_filter True -f json -o {path_base} {path_base}/for_whisper.wav -p True"
+    f"whisper-ctranslate2 --model large-v3 --vad_filter True -f json -o {path_base} {path_base}/muted.mp3 -p True"
 )
-print(f"python gemini_hiraganize.py {path_base}/for_whisper.json")
+print(f"python gemini_hiraganize.py {path_base}/muted.json")
