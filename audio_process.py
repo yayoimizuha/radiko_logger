@@ -41,6 +41,14 @@ if not path.exists(separated_path):
         ]
     )
 
+if path.exists(
+    path.join(
+        path_base,
+        "muted.mp3",
+    )
+):
+    exit(0)
+
 vocal = AudioSegment.from_file(separated_path)
 
 print(f"{vocal.duration_seconds}sec")
@@ -83,8 +91,8 @@ vocal_gaussian_norm = (vocal_ave - vocal_ave.min()) / (
 no_music: np.ndarray = vocal_gaussian_norm > 0.6
 # print(no_music.astype(int).tolist())
 
-pyplot.plot(vocal_gaussian_norm)
-pyplot.show()
+# pyplot.plot(vocal_gaussian_norm)
+# pyplot.show()
 # exit()
 # base_sound = AudioSegment.from_file(PATH)
 base_sound = vocal
@@ -160,16 +168,16 @@ muted_audio.export(
 
 subprocess.run(
     [
-        "ffmpeg",
-        "-hide_banner",
-        "-loglevel",
-        "fatal",
-        "-i",
+        "cp",
+        # "-hide_banner",
+        # "-loglevel",
+        # "fatal",
+        # "-i",
         PATH,
-        "-n",
+        # "-n",
         path.join(
             path_base,
-            "for_gemini.mp3",
+            "for_gemini.m4a",
         ),
     ]
 )

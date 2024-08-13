@@ -1,6 +1,6 @@
 ## `audio_process.py` for all files.
 ```bash
-find ~/Music/radio/ | xargs -P4 -IX --process-slot-var=DEVICE bash -c "CUDA_VISIBLE_DEVICES=\$((\`printenv DEVICE\`%2)) TQDM_DISABLE=1 python audio_process.py X"
+find ~/Music/radio/ -name "*.m4a" | xargs -P4 -IX --process-slot-var=DEVICE bash -c "CUDA_VISIBLE_DEVICES=\$((\`printenv DEVICE\`%2)) TQDM_DISABLE=1 python audio_process.py X"
 ```
 
 ## `whisper-ctranslate2` for all files.
